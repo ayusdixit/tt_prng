@@ -17,11 +17,7 @@ TEST_SEED       = 0x14 # A seed value to use for testing (20 decimal)
 
 # LFSR golden model 
 def lfsr_model(current_value: int) -> int:
-    """
-    A perfect software model of the DUT's LFSR logic.
-    It calculates the next state based on the current state.
-    Matches Verilog: `feedback = q[7]^q[5]^q[4]^q[3]` and `q <= {q[6:0], feedback}`
-    """
+    
     feedback = ((current_value >> 7) & 1) ^ \
                ((current_value >> 5) & 1) ^ \
                ((current_value >> 4) & 1) ^ \
@@ -43,7 +39,7 @@ async def setup_dut(dut):
 
 @cocotb.test()
 async def test_reset(dut):
-    """Tests that the LFSR register resets to the correct default value."""
+ 
     dut._log.info("////////////// Starting Reset Test ///////////////")
     tqv = await setup_dut(dut)
 
@@ -55,7 +51,7 @@ async def test_reset(dut):
 
 @cocotb.test()
 async def test_load(dut):
-    """Tests that a new seed value can be loaded into the LFSR."""
+   
     dut._log.info("////////////// Starting Load Test ///////////////")
     tqv = await setup_dut(dut)
 
@@ -65,7 +61,7 @@ async def test_load(dut):
     # Read the value back to verify the write was successful
     val = await tqv.read_reg(REG_Q_READ)
     assert val == TEST_SEED, f"Failed to load value! Expected 0x{TEST_SEED:02X}, got 0x{val:02X}"
-    dut._log.info(f"✅ Successfully loaded value 0x{val:02X}.")
+    dut._log.info(f"Successfully loaded value 0x{val:02X}.")
 
 
 @cocotb.test()
